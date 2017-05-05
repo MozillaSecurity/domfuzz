@@ -9,6 +9,7 @@ user_pref("extensions.autoDisableScopes", 0);
 user_pref("extensions.update.notifyUser", false);
 user_pref("extensions.installDistroAddons", false);
 user_pref("xpinstall.signatures.required", false);
+user_pref("extensions.allow-non-mpc-extensions", true); // Required to load fuzzPriv
 
 // For slow scripts (both chrome and content), stop the script rather than bringing up a modal dialog.
 // The extra testing of the slow-script dialog is not worth the slowdown.
@@ -67,9 +68,11 @@ user_pref("browser.newtabpage.directory.ping", "");
 user_pref("browser.newtabpage.directory.source", 'data:application/json,{"testing":1}');
 user_pref("browser.safebrowsing.enabled", false);
 user_pref("browser.safebrowsing.malware.enabled", false);
+user_pref("browser.safebrowsing.blockedURIs.enabled", false);
 user_pref("privacy.trackingprotection.enabled", false);
 user_pref("privacy.trackingprotection.pbmode.enabled", false);
 user_pref("browser.search.update", false);
+user_pref("browser.search.geoip.url", "");
 user_pref("browser.webapps.checkForUpdates", 0);
 user_pref("app.update.enabled", false);
 user_pref("app.update.stage.enabled", false);
@@ -93,6 +96,7 @@ user_pref("browser.snippets.firstrunHomepage.enabled", false);
 user_pref("browser.snippets.syncPromo.enabled", false);
 user_pref("general.useragent.updates.enabled", false);
 user_pref("media.gmp-manager.url.override", "http://127.0.0.1:6/dummy-gmp-manager.xml");
+user_pref("captivedetect.canonicalURL", "");
 
 // Prevent the fuzzer from accidentally contacting servers.
 //   Note: Since we are not actually running a proxy on port 6,
@@ -121,3 +125,16 @@ user_pref("media.peerconnection.noise_enabled", false);
 user_pref("media.peerconnection.use_document_iceservers", true);
 user_pref("media.peerconnection.turn.disable", false);
 user_pref("browser.ssl_override_behavior", 1);
+user_pref("dom.IntersectionObserver.enabled", true);
+user_pref("layout.visibility.min-notify-intersection-observers-interval-ms", 0);
+
+// Canvas prefs from Tyson
+user_pref("canvas.hitregions.enabled", true);
+user_pref("gfx.canvas.azure.accelerated", true);
+user_pref("canvas.capturestream.enabled", true);
+user_pref("canvas.customfocusring.enabled", true);
+user_pref("canvas.filters.enabled", true);
+user_pref("canvas.focusring.enabled", true);
+user_pref("canvas.hitregions.enabled", true);
+user_pref("canvas.imagebitmap_extensions.enabled", true);
+user_pref("canvas.path.enabled", true);
