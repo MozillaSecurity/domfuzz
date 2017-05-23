@@ -1,4 +1,6 @@
-This repository contains two JavaScript-based fuzzers. [jsfunfuzz](js/jsfunfuzz) tests JavaScript engines and can run in a JavaScript shell. [DOMFuzz](dom) tests layout and other parts of browser engines through DOM API calls.
+**For the maintained version of jsfunfuzz, head to the [funfuzz](https://github.com/MozillaSecurity/funfuzz) repository.**
+
+This repository contains [DOMFuzz](dom) tests layout and other parts of browser engines through DOM API calls.
 
 Most of the code other than testcase generation is written in Python: restarting the program when it exits or crashes, noticing evidence of new bugs from the program's output, [reducing testcases](https://github.com/MozillaSecurity/lithium/), and [identifying when regressions were introduced](autobisect-js/README.md).
 
@@ -71,29 +73,31 @@ especially after updating major/minor OS versions. This sometimes manifests on M
   * Debian/Ubuntu: ```sudo apt-get install clang```
 
 
-## Running funfuzz
+## ~~Running funfuzz~~
 
-To run **all of the domfuzz and js fuzzers** which test builds every 8 hours:
+*For the maintained version of jsfunfuzz, head to the [funfuzz](https://github.com/MozillaSecurity/funfuzz) repository.*
+
+~~To run **all of the domfuzz and js fuzzers** which test builds every 8 hours:~~
 
 `python -u funfuzz/loopBot.py -b "--random" --target-time 28800 | tee ~/log-loopBotPy.txt`
 
-To run **only the js fuzzers** which compiles shells with random configurations every 8 hours and tests them:
+~~To run **only the js fuzzers** which compiles shells with random configurations every 8 hours and tests them:~~
 
 `python -u funfuzz/loopBot.py -b "--random" -t "js" --target-time 28800 | tee ~/log-loopBotPy.txt`
 
-To test **a patch** (assuming patch is in ~/patch.diff) against a specific branch (assuming **Mercurial** mozilla-inbound is in ~/trees/mozilla-inbound), using a debug 64-bit deterministic shell configuration, every 8 hours:
+~~To test **a patch** (assuming patch is in ~/patch.diff) against a specific branch (assuming **Mercurial** mozilla-inbound is in ~/trees/mozilla-inbound), using a debug 64-bit deterministic shell configuration, every 8 hours:~~
 
 `python -u funfuzz/loopBot.py -b "--enable-debug --enable-more-deterministic -R ~/trees/mozilla-inbound -P ~/patch.diff" -t "js" --target-time 28800 | tee ~/log-loopBotPy.txt`
 
-In js mode, loopBot.py makes use of:
+~~In js mode, loopBot.py makes use of:~~
 
-* [compileShell](js/compileShell.py)
-* [jsfunfuzz](js/jsfunfuzz)
-* [compareJIT](js/compareJIT.py) (if testing deterministic builds)
-* randorderfuzz (included in jsfunfuzz, if tests are present in the mozilla repository)
-* [autoBisect](autobisect-js/README.md) (if the mozilla repository is present).
+* ~~[compileShell](js/compileShell.py)~~
+* ~~[jsfunfuzz](js/jsfunfuzz)~~
+* ~~[compareJIT](js/compareJIT.py) (if testing deterministic builds)~~
+* ~~randorderfuzz (included in jsfunfuzz, if tests are present in the mozilla repository)~~
+* ~~[autoBisect](autobisect-js/README.md) (if the mozilla repository is present).~~
 
-The parameters in `-b` get passed into [compileShell](js/compileShell.py) and [autoBisect](autobisect-js/README.md).
+~~The parameters in `-b` get passed into [compileShell](js/compileShell.py) and [autoBisect](autobisect-js/README.md).~~
 
 FuzzManager support got landed, so you will also need to create a ~/.fuzzmanagerconf file, similar to:
 
