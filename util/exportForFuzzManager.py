@@ -79,8 +79,8 @@ def main():
     print
     print json.dumps(exportSignatures(validAssertion, fmkb,
         [
-            os.path.expanduser("~/funfuzz/known/mozilla-central/assertions.txt"),
-            os.path.expanduser("~/funfuzz-private/known/mozilla-central/assertions.txt")
+            os.path.expanduser("~/domfuzz/known/mozilla-central/assertions.txt"),
+            os.path.expanduser("~/domfuzz-private/known/mozilla-central/assertions.txt")
         ]), indent=4)
 
     print
@@ -88,8 +88,8 @@ def main():
     print
     print json.dumps(exportSignatures(validCrash, fmkb,
         [
-            os.path.expanduser("~/funfuzz/known/mozilla-central/crashes.txt"),
-            os.path.expanduser("~/funfuzz-private/known/mozilla-central/crashes.txt")
+            os.path.expanduser("~/domfuzz/known/mozilla-central/crashes.txt"),
+            os.path.expanduser("~/domfuzz-private/known/mozilla-central/crashes.txt")
         ]), indent=4)
 
 
