@@ -238,4 +238,11 @@ def afterColon(s):
 
 
 if __name__ == "__main__":
+    try:
+        from xvfbwrapper import Xvfb
+        with Xvfb() as xvfb:
+            many_timed_runs(None, sps.createWtmpDir(os.getcwdu()), sys.argv[1:], createCollector.createCollector("DOMFuzz"), quiet=False)
+    except ImportError:
+        print 'pip install xvfbwrapper for headless operation'
+
     many_timed_runs(None, sps.createWtmpDir(os.getcwdu()), sys.argv[1:], createCollector.createCollector("DOMFuzz"), quiet=False)
