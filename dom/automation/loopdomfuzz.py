@@ -39,7 +39,7 @@ def linkFuzzer(target_fn):
 
     module_dirs = []
     for name in sorted(os.listdir(REPO_PARENT_PATH)):
-        if name.startswith("fuzzing") or name.startswith("funfuzz"):
+        if name.startswith("fuzzing") or name.startswith("domfuzz"):
             module_dir = os.path.join(REPO_PARENT_PATH, name, "dom", "fuzzer", "modules")
             if os.path.isdir(module_dir):
                 module_dirs.append(module_dir)
