@@ -236,13 +236,19 @@ def afterColon(s):
     tail = s.partition(": ")[2]
     return tail.strip()
 
+def start_runs():
+    many_timed_runs(None, sps.createWtmpDir(os.getcwdu()), sys.argv[1:], createCollector.createCollector("DOMFuzz"), quiet=False)
 
 if __name__ == "__main__":
     try:
         from xvfbwrapper import Xvfb
-        with Xvfb() as xvfb:
-            many_timed_runs(None, sps.createWtmpDir(os.getcwdu()), sys.argv[1:], createCollector.createCollector("DOMFuzz"), quiet=False)
+        HAVE_XVFB = True
     except ImportError:
-        print 'pip install xvfbwrapper for headless operation'
+        HAVE_XVFB = False
 
-    many_timed_runs(None, sps.createWtmpDir(os.getcwdu()), sys.argv[1:], createCollector.createCollector("DOMFuzz"), quiet=False)
+    if HAVE_XVFB and int(os.getenv("USE_XVFB", 0)):
+        with Xvfb():
+            start_runs()
+    else:
+        start_runs()
+
