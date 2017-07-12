@@ -157,7 +157,7 @@ def understoodJsfunfuzzExit(out, err):
             return True
 
     for line in out:
-        if line.startswith("It's looking good!") or line.startswith("jsfunfuzz broke its own scripting environment: "):
+        if line.startswith("It's looking good!") or line.startswith("domfuzz broke its own scripting environment: "):
             return True
         if line.startswith("Found a bug: "):
             return True

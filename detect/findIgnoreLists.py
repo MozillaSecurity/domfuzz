@@ -13,15 +13,15 @@ REPO_PARENT_PATH = os.path.abspath(os.path.join(THIS_SCRIPT_DIRECTORY, os.pardir
 #   for project branches and for their base branches (e.g. mozilla-central)
 #
 # Given a targetRepo "mozilla-central/ionmonkey" and a name "crashes.txt", returns a list of 2N absolute paths like:
-#   ???/funfuzz*/known/mozilla-central/ionmonkey/crashes.txt
-#   ???/funfuzz*/known/mozilla-central/crashes.txt
+#   ???/domfuzz*/known/mozilla-central/ionmonkey/crashes.txt
+#   ???/domfuzz*/known/mozilla-central/crashes.txt
 
 
 def findIgnoreLists(targetRepo, needle):
     r = []
     assert not targetRepo.startswith("/")
     for name in sorted(os.listdir(REPO_PARENT_PATH)):
-        if name.startswith("funfuzz"):
+        if name.startswith("domfuzz"):
             knownPath = os.path.join(REPO_PARENT_PATH, name, "known", targetRepo)
             if os.path.isdir(knownPath):
                 while os.path.basename(knownPath) != "known":

@@ -18,7 +18,7 @@ path0 = os.path.dirname(os.path.abspath(__file__))
 
 
 def buildOptionsASan():
-    mozconfig = os.path.expanduser("~/funfuzz/dom/mozconfig/mozconfig-asan")
+    mozconfig = os.path.expanduser("~/domfuzz/dom/mozconfig/mozconfig-asan")
     srcdir = os.path.expanduser("~/trees/mozilla-central/")
     objdir = srcdir + "obj-firefox-asan/"
     return " ".join(["--mozconfig", mozconfig, "--repoDir", srcdir, "--objDir", objdir])
