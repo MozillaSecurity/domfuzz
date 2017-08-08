@@ -73,31 +73,13 @@ especially after updating major/minor OS versions. This sometimes manifests on M
   * Debian/Ubuntu: ```sudo apt-get install clang```
 
 
-## ~~Running funfuzz~~
+## Running domfuzz
 
 *For the maintained version of jsfunfuzz, head to the [funfuzz](https://github.com/MozillaSecurity/funfuzz) repository.*
 
-~~To run **all of the domfuzz and js fuzzers** which test builds every 8 hours:~~
 
-`python -u funfuzz/loopBot.py -b "--random" --target-time 28800 | tee ~/log-loopBotPy.txt`
+`python ./domfuzz/dom/automation/loopdomfuzz.py --submit ~/build`
 
-~~To run **only the js fuzzers** which compiles shells with random configurations every 8 hours and tests them:~~
-
-`python -u funfuzz/loopBot.py -b "--random" -t "js" --target-time 28800 | tee ~/log-loopBotPy.txt`
-
-~~To test **a patch** (assuming patch is in ~/patch.diff) against a specific branch (assuming **Mercurial** mozilla-inbound is in ~/trees/mozilla-inbound), using a debug 64-bit deterministic shell configuration, every 8 hours:~~
-
-`python -u funfuzz/loopBot.py -b "--enable-debug --enable-more-deterministic -R ~/trees/mozilla-inbound -P ~/patch.diff" -t "js" --target-time 28800 | tee ~/log-loopBotPy.txt`
-
-~~In js mode, loopBot.py makes use of:~~
-
-* ~~[compileShell](js/compileShell.py)~~
-* ~~[jsfunfuzz](js/jsfunfuzz)~~
-* ~~[compareJIT](js/compareJIT.py) (if testing deterministic builds)~~
-* ~~randorderfuzz (included in jsfunfuzz, if tests are present in the mozilla repository)~~
-* ~~[autoBisect](autobisect-js/README.md) (if the mozilla repository is present).~~
-
-~~The parameters in `-b` get passed into [compileShell](js/compileShell.py) and [autoBisect](autobisect-js/README.md).~~
 
 FuzzManager support got landed, so you will also need to create a ~/.fuzzmanagerconf file, similar to:
 
@@ -115,7 +97,7 @@ Replace anything between "<" and ">" with your desired parameters.
 
 ## FAQ:
 
-**Q: What platforms does funfuzz run on?**
+**Q: What platforms does domfuzz run on?**
 
 **A:** compileShell has been tested on:
 
@@ -138,6 +120,21 @@ Support for the following operating systems **have been removed**:
 * Windows XP
 * Mac OS X 10.6 through 10.9
 
-**Q: What version of Python does funfuzz require?**
+**Q:** What version of Python does domfuzz require?
 
 **A:** We recommend the Python 2.7.x series. There is no support for Python3 yet.
+
+**Q:** How do I reproduce a crash from a test case?
+
+**A:** The domfuzz way:
+```bash
+ python ./domfuzz/dom/automation/domInteresting.py ~/build ~/test_case.html
+ ```
+ The manual way:<br>
+ ```bash
+mkdir -p ~/px/df/extensions
+cp ./domfuzz/dom/automation/constant-prefs.js ~/px/df/prefs.js
+echo ./domfuzz/domfuzz/dom/extension/ > ~/px/df/extensions/domfuzz@squarefree.com
+lldb -- ~/build/dist/bin/firefox -profile ~/px/df/ ~/test_case.html 
+
+```
