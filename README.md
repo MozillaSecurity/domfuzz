@@ -135,6 +135,6 @@ Support for the following operating systems **have been removed**:
 mkdir -p ~/px/df/extensions
 cp ./domfuzz/dom/automation/constant-prefs.js ~/px/df/prefs.js
 echo ./domfuzz/domfuzz/dom/extension/ > ~/px/df/extensions/domfuzz@squarefree.com
-lldb -- ~/build/dist/bin/firefox -profile ~/px/df/ ~/test_case.html 
+lldb -- ~/build/dist/bin/firefox -profile ~/px/df/ -no-remote ~/test_case.html 
 
 ```
