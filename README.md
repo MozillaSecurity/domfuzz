@@ -78,7 +78,7 @@ especially after updating major/minor OS versions. This sometimes manifests on M
 *For the maintained version of jsfunfuzz, head to the [funfuzz](https://github.com/MozillaSecurity/funfuzz) repository.*
 
 
-`python ./domfuzz/dom/automation/loopdomfuzz.py --submit ~/build`
+`python ./domfuzz/dom/automation/loopdomfuzz.py ~/build`
 
 
 FuzzManager support got landed, so you will also need to create a ~/.fuzzmanagerconf file, similar to:
@@ -126,15 +126,15 @@ Support for the following operating systems **have been removed**:
 
 **Q:** How do I reproduce a crash from a test case?
 
-**A:** The domfuzz way:
-```bash
- python ./domfuzz/dom/automation/domInteresting.py ~/build ~/test_case.html
- ```
- The manual way:<br>
- ```bash
-mkdir -p ~/px/df/extensions
-cp ./domfuzz/dom/automation/constant-prefs.js ~/px/df/prefs.js
-echo ./domfuzz/domfuzz/dom/extension/ > ~/px/df/extensions/domfuzz@squarefree.com
-lldb -- ~/build/dist/bin/firefox -profile ~/px/df/ -no-remote ~/test_case.html 
+**A:**
 
-```
+The domfuzz way:
+
+    python ./domfuzz/dom/automation/domInteresting.py ~/build ~/test_case.html
+
+The manual way:
+
+    mkdir -p ~/px/df/extensions
+    cp ./domfuzz/dom/automation/constant-prefs.js ~/tmp_profile/prefs.js
+    echo ./domfuzz/domfuzz/dom/extension/ > ~/tmp_profile/extensions/domfuzz@squarefree.com
+    lldb -- ~/build/dist/bin/firefox -profile ~/tmp_profile/ -no-remote ~/test_case.html
