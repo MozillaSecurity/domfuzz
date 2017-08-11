@@ -9,7 +9,7 @@ user_pref("extensions.autoDisableScopes", 0);
 user_pref("extensions.update.notifyUser", false);
 user_pref("extensions.installDistroAddons", false);
 user_pref("xpinstall.signatures.required", false);
-user_pref("extensions.allow-non-mpc-extensions", true); // Required to load fuzzPriv
+user_pref("extensions.legacy.enabled", true); // Required to load fuzzPriv
 
 // For slow scripts (both chrome and content), stop the script rather than bringing up a modal dialog.
 // The extra testing of the slow-script dialog is not worth the slowdown.
