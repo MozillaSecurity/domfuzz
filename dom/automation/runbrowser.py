@@ -114,7 +114,10 @@ def runBrowser():
                                debuggerInfo=debuggerInfoVG,
                                maxTime=400.0 * slowness,
                                timeout=200.0 * slowness)
-    print "RUNBROWSER INFO | runbrowser.py | runApp: exited with status %d" % status[0]
+    if status:
+        print "RUNBROWSER INFO | runbrowser.py | runApp: exited with status %d" % status[0]
+    else:
+        print "RUNBROWSER INFO | runbrowser.py | runApp: exited but status was unavailable"
 
 
 def stripForegroundArg(buildCommandLine):
