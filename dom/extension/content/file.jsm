@@ -6,7 +6,8 @@
 
 function fileObject(path)
 {
-  return new Components.utils.import("resource://gre/modules/FileUtils.jsm").FileUtils.File(path);
+  var FileUtils = Components.utils.import("resource://gre/modules/FileUtils.jsm").FileUtils;
+  return new FileUtils.File(path);
 }
 
 
