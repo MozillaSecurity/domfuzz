@@ -250,7 +250,10 @@ def refreshSignatures(collector):
 
 def start_runs():
     collector = createCollector.createCollector("DOMFuzz")
-    refreshSignatures(collector)
+    try:
+        refreshSignatures(collector)
+    except:
+        pass
 
     many_timed_runs(None, sps.createWtmpDir(os.getcwdu()), sys.argv[1:], collector, quiet=False)
 
