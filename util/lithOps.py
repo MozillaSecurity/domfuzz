@@ -14,12 +14,7 @@ import tempfile
 
 import subprocesses as sps
 
-p0 = os.path.dirname(os.path.abspath(__file__))
-lithiumpy = os.path.join(p0, os.pardir, os.pardir, "lithium", "lithium", "lithium.py")
-if not os.path.exists(lithiumpy):
-    print "Please check out Lithium and FuzzManager side-by-side with domfuzz. Links in https://github.com/MozillaSecurity/domfuzz/#setup"
-    sys.exit(2)
-runlithiumpy = [sys.executable, "-u", lithiumpy]
+runlithiumpy = [sys.executable, "-m", "lithium"]
 
 # Status returns for runLithium and many_timed_runs (in loopdomfuzz.py, etc.)
 (HAPPY, NO_REPRO_AT_ALL, NO_REPRO_EXCEPT_BY_URL, LITH_NO_REPRO,

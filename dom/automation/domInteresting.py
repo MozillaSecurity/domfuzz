@@ -47,7 +47,7 @@ import fileManipulation
 import subprocesses as sps
 import createCollector
 
-# From FuzzManager (in sys.path thanks to import createCollector above)
+# From FuzzManager
 import FTB.Signatures.CrashInfo as CrashInfo
 from FTB.ProgramConfiguration import ProgramConfiguration
 
