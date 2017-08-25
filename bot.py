@@ -26,11 +26,6 @@ path2 = os.path.abspath(os.path.join(path0, 'dom', 'automation'))
 sys.path.append(path2)
 import loopdomfuzz
 import buildBrowser
-path3 = os.path.abspath(os.path.join(path0, 'js'))
-sys.path.append(path3)
-import buildOptions
-import compileShell
-import loopjsfunfuzz
 
 localSep = "/"  # even on windows, i have to use / (avoid using os.path.join) in bot.py! is it because i'm using bash?
 
@@ -63,8 +58,8 @@ def parseOpts():
         useTreeherderBuilds=False,
     )
 
-    parser.add_option('-t', '--test-type', dest='testType', choices=['js', 'dom'],
-                      help='Test type: "js" or "dom"')
+    parser.add_option('-t', '--test-type', dest='testType', choices=['dom'],
+                      help='Test type: "dom"')
 
     parser.add_option("--build", dest="existingBuildDir",
                       help="Use an existing build directory.")
@@ -94,7 +89,7 @@ def parseOpts():
         print "Warning: bot.py does not use positional arguments"
 
     if not options.testType:
-        raise Exception('options.testType should first be set to "js" or "dom"')
+        raise Exception('options.testType should first be set to "dom"')
 
     if not options.useTreeherderBuilds and not os.path.isdir(buildOptions.DEFAULT_TREES_LOCATION):
         # We don't have trees, so we must use treeherder builds.
@@ -199,56 +194,24 @@ def ensureBuild(options):
         bRev = ''
         manyTimedRunArgs = []
     elif not options.useTreeherderBuilds:
-        if options.testType == "js":
-            # Compiled js shells
-            options.buildOptions = buildOptions.parseShellOptions(options.buildOptions)
-            options.timeout = options.timeout or machineTimeoutDefaults(options)
-
-            with LockDir(compileShell.getLockDirPath(options.buildOptions.repoDir)):
-                bRev = hgCmds.getRepoHashAndId(options.buildOptions.repoDir)[0]
-                cshell = compileShell.CompiledShell(options.buildOptions, bRev)
-                updateLatestTxt = (options.buildOptions.repoDir == 'mozilla-central')
-                compileShell.obtainShell(cshell, updateLatestTxt=updateLatestTxt)
-
-                bDir = cshell.getShellCacheDir()
-                # Strip out first 3 chars or else the dir name in fuzzing jobs becomes:
-                #   js-js-dbg-opt-64-dm-linux
-                # This is because options.testType gets prepended along with a dash later.
-                bType = buildOptions.computeShellType(options.buildOptions)[3:]
-                bSrc = (
-                    'Create another shell in shell-cache like this one:\n' +
-                    'python -u %s -b "%s -R %s" -r %s\n\n' % (
-                        os.path.join(path3, 'compileShell.py'), options.buildOptions.buildOptionsStr,
-                        options.buildOptions.repoDir, bRev
-                    ) +
-                    '==============================================\n' +
-                    '|  Fuzzing %s js shell builds\n' % cshell.getRepoName() +
-                    '|  DATE: %s\n' % sps.dateStr() +
-                    '==============================================\n\n')
-
-                manyTimedRunArgs = mtrArgsCreation(options, cshell)
-                print 'buildDir is: ' + bDir
-                print 'buildSrc is: ' + bSrc
-        else:
-            # Compiled browser
-            options.buildOptions = buildBrowser.parseOptions(options.buildOptions.split())
-            bDir = options.buildOptions.objDir
-            bType = platform.system() + "-" + os.path.basename(options.buildOptions.mozconfig)
-            bSrc = repr(hgCmds.getRepoHashAndId(options.buildOptions.repoDir))
-            bRev = ''
-            manyTimedRunArgs = []
-            success = buildBrowser.tryCompiling(options.buildOptions)
-            if not success:
-                raise Exception('Building a browser failed.')
+        # Compiled browser
+        options.buildOptions = buildBrowser.parseOptions(options.buildOptions.split())
+        bDir = options.buildOptions.objDir
+        bType = platform.system() + "-" + os.path.basename(options.buildOptions.mozconfig)
+        bSrc = repr(hgCmds.getRepoHashAndId(options.buildOptions.repoDir))
+        bRev = ''
+        manyTimedRunArgs = []
+        success = buildBrowser.tryCompiling(options.buildOptions)
+        if not success:
+            raise Exception('Building a browser failed.')
     else:
-        # Treeherder js shells and browser
+        # Treeherder browser
         # Download from Treeherder and call it 'build'
         # FIXME: Put 'build' somewhere nicer, like ~/fuzzbuilds/. Don't re-download a build that's up to date.
         # FIXME: randomize branch selection, get appropriate builds, use appropriate known dirs
         bDir = 'build'
         bType = downloadBuild.defaultBuildType(options.repoName, None, True)
-        isJS = options.testType == 'js'
-        bSrc = downloadBuild.downloadLatestBuild(bType, './', getJsShell=isJS, wantTests=not isJS)
+        bSrc = downloadBuild.downloadLatestBuild(bType, './', getJsShell=False, wantTests=True)
         bRev = ''
 
         # These two lines are only used for treeherder js shells:
@@ -260,10 +223,7 @@ def ensureBuild(options):
 
 def loopFuzzingAndReduction(options, buildInfo, collector, i):
     tempDir = tempfile.mkdtemp("loop" + str(i))
-    if options.testType == 'js':
-        loopjsfunfuzz.many_timed_runs(options.targetTime, tempDir, buildInfo.mtrArgs, collector)
-    else:
-        loopdomfuzz.many_timed_runs(options.targetTime, tempDir, [buildInfo.buildDir], collector)
+    loopdomfuzz.many_timed_runs(options.targetTime, tempDir, [buildInfo.buildDir], collector)
 
 
 def machineTimeoutDefaults(options):
