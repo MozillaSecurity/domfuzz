@@ -236,8 +236,26 @@ def afterColon(s):
     tail = s.partition(": ")[2]
     return tail.strip()
 
+def refreshSignatures(collector):
+    """Refresh signatures, copying from FuzzManager server to local sigcache."""
+    # Btw, you should make sure the server generates the file using
+    #     python manage.py export_signatures files/signatures.zip
+    # occasionally, e.g. as a cron job.
+    if collector.serverHost == "127.0.0.1":
+        # The test server does not serve files
+        collector.refreshFromZip(os.path.join(path0, "..", "FuzzManager", "server", "files", "signatures.zip"))
+    else:
+        # A production server will serve files
+        collector.refresh()
+
 def start_runs():
-    many_timed_runs(None, sps.createWtmpDir(os.getcwdu()), sys.argv[1:], createCollector.createCollector("DOMFuzz"), quiet=False)
+    collector = createCollector.createCollector("DOMFuzz")
+    try:
+        refreshSignatures(collector)
+    except:
+        pass
+
+    many_timed_runs(None, sps.createWtmpDir(os.getcwdu()), sys.argv[1:], collector, quiet=False)
 
 if __name__ == "__main__":
     try:

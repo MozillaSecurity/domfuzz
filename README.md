@@ -134,7 +134,7 @@ The domfuzz way:
 
 The manual way:
 
-    mkdir -p ~/px/df/extensions
+    mkdir -p ~/tmp_profile/extensions
     cp ./domfuzz/dom/automation/constant-prefs.js ~/tmp_profile/prefs.js
-    echo ./domfuzz/domfuzz/dom/extension/ > ~/tmp_profile/extensions/domfuzz@squarefree.com
+    echo ./domfuzz/dom/extension/ > ~/tmp_profile/extensions/domfuzz@squarefree.com
     lldb -- ~/build/dist/bin/firefox -profile ~/tmp_profile/ -no-remote ~/test_case.html
