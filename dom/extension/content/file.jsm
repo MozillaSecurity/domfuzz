@@ -6,10 +6,8 @@
 
 function fileObject(path)
 {
-  var f = Components.classes["@mozilla.org/file/local;1"]
-                    .createInstance(Components.interfaces.nsILocalFile);
-  f.initWithPath(path);
-  return f;
+  var FileUtils = Components.utils.import("resource://gre/modules/FileUtils.jsm").FileUtils;
+  return new FileUtils.File(path);
 }
 
 

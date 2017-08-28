@@ -19,7 +19,7 @@ var fuzzCommands = [
 ];
 ```
 
-The ``DDBEGIN`` and ``DDEND`` markers tell Lithium what part of the file to reduce, and the `quitApplication` call tells Firefox to exit after running the scripts. loopdomfuzz.py calls Lithium once. If you change the testcase in a way that should un-stick Lithium, you can run Lithium again with the same options (typically `lithium.py domInteresting.py build testcase.html`).
+The ``DDBEGIN`` and ``DDEND`` markers tell Lithium what part of the file to reduce, and the `quitApplication` call tells Firefox to exit after running the scripts. loopdomfuzz.py calls Lithium once. If you change the testcase in a way that should un-stick Lithium, you can run Lithium again with the same options (typically `lithium domInteresting.py build testcase.html`).
 
 
 ## Reducing layout testcases

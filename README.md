@@ -2,12 +2,12 @@
 
 This repository contains [DOMFuzz](dom) tests layout and other parts of browser engines through DOM API calls.
 
-Most of the code other than testcase generation is written in Python: restarting the program when it exits or crashes, noticing evidence of new bugs from the program's output, [reducing testcases](https://github.com/MozillaSecurity/lithium/), and [identifying when regressions were introduced](autobisect-js/README.md).
+Most of the code other than testcase generation is written in Python: restarting the program when it exits or crashes, noticing evidence of new bugs from the program's output, [reducing testcases](https://github.com/MozillaSecurity/lithium/).
 
 
 ## Setup
 
-Check out the **[lithium](https://github.com/MozillaSecurity/lithium/)** and **[FuzzManager](https://github.com/MozillaSecurity/FuzzManager)** repositories side-by-side by this one.
+Install **[lithium](https://github.com/MozillaSecurity/lithium/)** and **[FuzzManager](https://github.com/MozillaSecurity/FuzzManager)** repositories globally or in a virtualenv.
 
 Some parts of the fuzzer will only activate if the Python scripts can find your mozilla-central tree:
 ```
