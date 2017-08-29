@@ -7,7 +7,7 @@ Most of the code other than testcase generation is written in Python: restarting
 
 ## Setup
 
-Install **[lithium](https://github.com/MozillaSecurity/lithium/)** and **[FuzzManager](https://github.com/MozillaSecurity/FuzzManager)** repositories globally or in a virtualenv.
+Install the required pip packages using `pip install -r requirements.txt`.
 
 Some parts of the fuzzer will only activate if the Python scripts can find your mozilla-central tree:
 ```
