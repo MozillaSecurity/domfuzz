@@ -258,15 +258,5 @@ def start_runs():
     many_timed_runs(None, sps.createWtmpDir(os.getcwdu()), sys.argv[1:], collector, quiet=False)
 
 if __name__ == "__main__":
-    try:
-        from xvfbwrapper import Xvfb
-        HAVE_XVFB = True
-    except ImportError:
-        HAVE_XVFB = False
-
-    if HAVE_XVFB and int(os.getenv("USE_XVFB", 0)):
-        with Xvfb():
-            start_runs()
-    else:
-        start_runs()
+    start_runs()
 
