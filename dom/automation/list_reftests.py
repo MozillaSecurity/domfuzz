@@ -4,7 +4,7 @@
 
 from __future__ import absolute_import
 
-import os, re
+import os, re, sys
 from subprocess import *
 
 
@@ -63,7 +63,15 @@ def add_result(r):
                 raise Exception("Missing test: " + r.split("?")[0])
             testfiles.add(r.split("?")[0])
 
-sourcetree = os.path.expanduser("~/trees/mozilla-central/") # XXX assumption alert!
+if len(sys.argv) != 2:
+    sys.stderr.write("Usage: python " + os.path.basename(__file__) + " <mozilla-topsrcdir>\n")
+    sys.exit(1)
+
+sourcetree = sys.argv[1]
+
+if not os.path.isfile(os.path.join(sourcetree, os.path.join("mozilla-config.h.in"))):
+    sys.stderr.write("Not a Mozilla source tree: " + sourcetree + "\n")
+    sys.exit(1)
 
 parse(os.path.join(sourcetree, "layout/reftests/reftest.list"), add_result)
 parse(os.path.join(sourcetree, "testing/crashtest/crashtests.list"), add_result)
