@@ -330,11 +330,16 @@ var fuzzerRandomClasses = (function() {
     try {
       var pdScript = fuzzPriv.cssPropertyDatabase();
 
-      var pdFunc = new Function(
-        "var SpecialPowers = { getBoolPref: function(p) { return true; } };" +
-        pdScript +
-        "return gCSSProperties;"
-      );
+      var pdFunc = new Function(`
+        var SpecialPowers = {
+          getBoolPref: function(p) { return true; },
+          DOMWindowUtils: {
+            isStyledByServo: true
+          }
+        };
+        ${pdScript}
+        return gCSSProperties;
+      `);
 
       pd = pdFunc();
 

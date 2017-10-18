@@ -2,10 +2,12 @@
 
 # Based on js/src/tests/manifest.py
 
-from __future__ import absolute_import
+from __future__ import absolute_import, print_function
 
-import os, re
-from subprocess import *
+import argparse
+import os
+import re
+import sys
 
 
 def parse(filename, add_result_callback):
@@ -50,23 +52,37 @@ def parse(filename, add_result_callback):
                     elif part == "script":
                         break
                     else:
-                        print 'warning: in %s unrecognized manifest line element "%s"' % (filename, parts[pos])
+                        print('warning: in %s unrecognized manifest line element "%s"' % (filename, parts[pos]), file=sys.stderr)
                         pos += 1
 
-testfiles = set()
 
-def add_result(r):
-    if not ("pngsuite" in r or "351236" in r or "432561" in r or "wrapper.html" in r or "xul" in r or "xbl" in r or r.endswith(".sjs")):
-        if r not in testfiles:
-            assert r.startswith(sourcetree)
-            if not os.path.exists(r.split("?")[0]):
-                raise Exception("Missing test: " + r.split("?")[0])
-            testfiles.add(r.split("?")[0])
+def main():
 
-sourcetree = os.path.expanduser("~/trees/mozilla-central/") # XXX assumption alert!
+    testfiles = set()
 
-parse(os.path.join(sourcetree, "layout/reftests/reftest.list"), add_result)
-parse(os.path.join(sourcetree, "testing/crashtest/crashtests.list"), add_result)
+    def add_result(r):
+        if not ("pngsuite" in r or "351236" in r or "432561" in r or "wrapper.html" in r or "xul" in r or "xbl" in r or r.endswith(".sjs")):
+            if r not in testfiles:
+                assert r.startswith(sourcetree)
+                if not os.path.exists(r.split("?")[0]):
+                    raise Exception("Missing test: " + r.split("?")[0])
+                testfiles.add(r.split("?")[0])
 
-for testfile in testfiles:
-    print testfile[len(sourcetree):].lstrip("\\/")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("mozilla-topsrcdir")
+    args = parser.parse_args()
+
+    sourcetree = args.mozilla_topsrcdir
+
+    if not os.path.isfile(os.path.join(sourcetree, os.path.join("mozilla-config.h.in"))):
+        parser.error("Not a Mozilla source tree: " + sourcetree)
+
+    parse(os.path.join(sourcetree, "layout/reftests/reftest.list"), add_result)
+    parse(os.path.join(sourcetree, "testing/crashtest/crashtests.list"), add_result)
+
+    for testfile in testfiles:
+        print(testfile[len(sourcetree):].lstrip("\\/"))
+
+
+if __name__ == "__main__":
+    main()
