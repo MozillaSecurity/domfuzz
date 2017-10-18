@@ -490,6 +490,10 @@ class BrowserConfig:
                           action="store_true", dest="background",
                           default=False,
                           help="Run the browser in the background on Mac (e.g. for local reduction)")
+        parser.add_option("--headless",
+                          action="store_true", dest="headless",
+                          default=False,
+                          help="Run without GUI")
         options, args = parser.parse_args(args)
 
         if len(args) < 1:
@@ -528,6 +532,9 @@ class BrowserConfig:
             runBrowserOptions.append("--background")
         if self.dirs.symbolsDir:
             runBrowserOptions.append("--symbols-dir=" + self.dirs.symbolsDir)
+
+        if self.options.headless:
+            runBrowserOptions.append("--headless")
 
         if self.options.valgrind:
             runBrowserOptions.append("--valgrind")
