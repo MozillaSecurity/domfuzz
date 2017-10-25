@@ -35,6 +35,10 @@ def runBrowser():
     parser.add_option("--background",
                       action="store_true", dest="background",
                       default=False)
+    parser.add_option("--headless",
+                      action="store_true", dest="headless",
+                      default=False,
+                      help="Run without GUI")
     options, args = parser.parse_args(sys.argv)
 
     reftestScriptDir = args[1]
@@ -99,6 +103,9 @@ def runBrowser():
     cmdLineArgs = []
     if "#fuzz=" in url:
         cmdLineArgs.append("-fuzzinject")
+    if options.headless:
+        cmdLineArgs.append("-headless")
+
     cmdLineArgs.append(url)
 
     print "RUNBROWSER INFO | runbrowser.py | runApp: start."
