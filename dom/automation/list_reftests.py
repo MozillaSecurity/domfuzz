@@ -69,7 +69,7 @@ def main():
                 testfiles.add(r.split("?")[0])
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("mozilla-topsrcdir")
+    parser.add_argument("mozilla_topsrcdir")
     args = parser.parse_args()
 
     sourcetree = args.mozilla_topsrcdir
