@@ -116,7 +116,7 @@ DOMFuzzHelperObserver.prototype = {
       case "DOMFuzzHelper.enableAccessibility":
         try {
           Components.classes["@mozilla.org/accessibilityService;1"]
-            .getService(Components.interfaces.nsIAccessibleRetrieval);
+            .getService(Components.interfaces.nsIAccessibilityService);
           dump("Enabled accessibility!\n");
         } catch(e) {
           dump("Couldn't enable accessibility: " + e + "\n");
