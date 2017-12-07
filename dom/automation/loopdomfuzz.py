@@ -29,6 +29,7 @@ import createCollector
 
 THIS_SCRIPT_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
 REPO_PARENT_PATH = os.path.abspath(os.path.join(THIS_SCRIPT_DIRECTORY, os.pardir, os.pardir, os.pardir))
+MY_PID = os.getpid()
 
 urlListFilename = "urls-reftests"  # XXX make this "--urls=..." somehow
 
@@ -47,12 +48,18 @@ def linkFuzzer(target_fn):
     linkJS.linkJS(target_fn, file_list_fn, source_base, module_dirs=module_dirs)
 
 
+def writeStats(tempDir, iterations, results):
+    with open(os.path.join(tempDir, "stats.txt"), "w") as f:
+        f.write('{"pid": %d, "iterations": %d, "results": %r}' % (MY_PID, iterations, results))
+
+
 # If targetTime is None, this loops forever.
 # If targetTime is a number, tries not to run for more than targetTime seconds.
 #   But if it finds a bug in the browser, for about 50% more time while it runs Lithium.
 def many_timed_runs(targetTime, tempDir, args, collector, quiet=True):
     startTime = time.time()
     iteration = 0
+    results = {}
 
     fuzzerJS = os.path.abspath(os.path.join(tempDir, "fuzzer-combined.js"))
     linkFuzzer(fuzzerJS)
@@ -63,6 +70,7 @@ def many_timed_runs(targetTime, tempDir, args, collector, quiet=True):
     reftestFilesDir = bc.dirs.reftestFilesDir
     reftestURLs = getURLs(os.path.abspath(reftestFilesDir))
 
+    writeStats(tempDir, iteration, results)
     while True:
         if targetTime and time.time() > startTime + targetTime:
             print "Out of time!"
@@ -119,9 +127,14 @@ def many_timed_runs(targetTime, tempDir, args, collector, quiet=True):
             else:
                 quality = 12
 
+            results.setdefault(quality, 0)
+            results[quality] += 1
+
             if collector:
                 # ddsize = lithOps.ddsize(rFN)
                 collector.submit(result.crashInfo, rFN, quality)
+
+        writeStats(tempDir, iteration, results)
 
         if bc.options.argURL:
             break
