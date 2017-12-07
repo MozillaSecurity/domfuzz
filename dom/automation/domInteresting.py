@@ -29,6 +29,7 @@ import platform
 from optparse import OptionParser
 from tempfile import mkdtemp
 import subprocess
+import time
 
 # could also use sys._getframe().f_code.co_filename, but this seems cleaner
 THIS_SCRIPT_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
@@ -101,6 +102,11 @@ def writePrefs(profileDir, extraPrefs):
 
     with open(os.path.join(profileDir, "prefs.js"), "w") as prefsFile:
         prefsFile.write(prefsText)
+
+    times_json = os.path.join(profileDir, "times.json")
+    if not os.path.isfile(times_json):
+        with open(times_json, "w") as times_fp:
+            times_fp.write('{"created":%d}' % (int(time.time()) * 1000))
 
 
 def createDOMFuzzProfile(profileDir):
@@ -402,7 +408,6 @@ class FigureOutDirs:
                     not os.environ.get('MINIDUMP_STACKWALK_CGI', None) and
                     os.path.exists(possible_stackwalk)):
                 self.stackwalk = possible_stackwalk
-            self.hgRev = downloadedBuildRev(browserDir)
             if os.path.exists(os.path.join(browserDir, "dist", "bin", "llvm-symbolizer")):
                 self.symbolizer = os.path.join(browserDir, "dist", "bin", "llvm-symbolizer")
         elif os.path.exists(os.path.join(browserDir, "dist")) and os.path.exists(os.path.join(browserDir, "_tests")):
@@ -412,11 +417,8 @@ class FigureOutDirs:
             self.reftestScriptDir = os.path.join(browserDir, "_tests", "reftest")
             self.utilityDir = os.path.join(browserDir, "dist", "bin")  # on mac, looking inside the app would also work!
             self.symbolsDir = os.path.join(browserDir, "dist", "crashreporter-symbols")
-            self.hgRev = hgRepoRev(findSrcDir(browserDir))  # welcome to assumptionville
         else:
             usage("browserDir does not appear to be a valid build: " + repr(browserDir))
-
-        print "hgRev = " + self.hgRev
 
         #if not os.path.exists(self.appDir):
         #  raise Exception("Oops! appDir does not exist!")
@@ -435,18 +437,6 @@ class FigureOutDirs:
 
 def hgRepoRev(repoDir):
     return subprocess.check_output(['hg', '-R', repoDir, 'log', '-r', '.', '--template', '{node|short}'])
-
-
-def downloadedBuildRev(browserDir):
-    downloadDir = os.path.join(browserDir, "download")
-    for fn in os.listdir(downloadDir):
-        if fn.startswith("firefox-") and fn.endswith(".txt"):
-            with open(os.path.join(downloadDir, fn)) as f:
-                _buildId = f.readline()
-                hgURL = f.readline()
-                return hgURL.split("/")[-1][0:12]
-            raise Exception("Missing rev in file")
-    return Exception("Missing file with rev")
 
 
 def findSrcDir(objDir):
@@ -508,7 +498,7 @@ class BrowserConfig:
         self.knownPath = "mozilla-central"
         self.collector = collector
         self.runBrowserOptions = self.initRunBrowserOptions()
-        self.pc = createProgramConfiguration(self.dirs.hgRev, None)
+        self.pc = ProgramConfiguration.fromBinary(os.path.join(browserDir, "firefox.exe" if sps.isWin else "firefox"))
 
     def initEnv(self):
         env = os.environ.copy()
@@ -708,29 +698,6 @@ def usage(note):
     print "(browserDir should be an objdir for a local build, or a Tinderbox build downloaded with downloadBuild.py --want-tests)"
     print
     sys.exit(2)
-
-
-def createProgramConfiguration(hgRev, args):
-    s = platform.system()
-    if s == "Darwin":
-        osname = "macosx"
-        is64 = platform.architecture()[0] == "64bit"
-    elif s == "Linux":
-        osname = "linux"
-        is64 = platform.machine() == "x86_64"
-    elif s == 'Windows':
-        osname = "windows"
-        is64 = False
-    else:
-        raise Exception("Unknown platform.system(): " + s)
-
-    return ProgramConfiguration(
-        "mozilla-central",
-        "x86-64" if is64 else "x86",
-        osname,
-        hgRev,
-        args=args
-    )
 
 
 # For use by Lithium
