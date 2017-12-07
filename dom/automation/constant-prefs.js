@@ -29,6 +29,7 @@ user_pref("dom.min_background_timeout_value", 4);
 user_pref("dom.successive_dialog_time_limit", 0);
 user_pref("network.manage-offline-status", false);
 user_pref("layout.spammy_warnings.enabled", false);
+user_pref("fuzzing.enabled", true);
 
 // Disable a timer-based drawWindow call in favor of fuzzPriv.callDrawWindow.
 user_pref("browser.pageThumbs.enabled", false);
@@ -115,6 +116,19 @@ user_pref("network.proxy.use_direct_on_fail", false);
 // Prefs from Christoph (?)
 user_pref("network.jar.open-unsafe-types", true);
 user_pref("gfx.color_management.mode", 2);
+user_pref("media.peerconnection.enabled", true);
+user_pref("media.peerconnection.identity.enabled", true);
+user_pref("media.peerconnection.dtmf.enabled", true);
+user_pref("media.peerconnection.video.h264_enabled", true);
+user_pref("permissions.default.camera", 1);
+user_pref("permissions.default.microphone", 1);
+user_pref("media.navigator.permission.disabled", true);
+user_pref("media.peerconnection.turn.disable", false);
+user_pref("media.peerconnection.remoteTrackId.enabled", true);
+user_pref("media.getusermedia.screensharing.enabled", true);
+user_pref("media.getusermedia.screensharing.allowed_domains", "localhost");
+user_pref("media.getusermedia.browser.enabled", true);
+user_pref("media.getusermedia.audiocapture.enabled", true);
 user_pref("media.peerconnection.aec", 1);
 user_pref("media.peerconnection.aec_enabled", true);
 user_pref("media.peerconnection.agc", 1);
@@ -138,3 +152,14 @@ user_pref("canvas.focusring.enabled", true);
 user_pref("canvas.hitregions.enabled", true);
 user_pref("canvas.imagebitmap_extensions.enabled", true);
 user_pref("canvas.path.enabled", true);
+
+// WebVR
+user_pref("dom.vr.enabled", true);
+user_pref("dom.vr.test.enabled", true);
+user_pref("dom.vr.puppet.enabled", true);
+user_pref("dom.vr.require-gesture", false);
+user_pref("dom.vr.poseprediction.enabled", false);
+user_pref("full-screen-api.allow-trusted-requests-only", false);
+
+// Allow access to dataURI objects
+user_pref("security.data_uri.unique_opaque_origin", false);

@@ -141,7 +141,9 @@ dom.url.encode_decode_hash
 dom.url.getters_decode_hash
 dom.wakelock.enabled
 dom.webcomponents.enabled
+dom.webcomponents.customelements.enabled
 dom.webnotifications.workers.enabled
+dom.payments.request.enabled
 dom.workers.enabled
 editor.use_css
 editor.use_custom_colors
