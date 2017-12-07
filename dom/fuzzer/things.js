@@ -50,7 +50,7 @@ var Things = {
     if (!classPrototype)
       return -1;
 
-    return Things.anyIndex(function(v) { return (v instanceof classPrototype); });
+    return Things.anyIndex(function(v) { try { return (v instanceof classPrototype); } catch(e) { return false; } });
   },
   instance: function(className) {
     return "o[" + Things.instanceIndex(className) + "]";
