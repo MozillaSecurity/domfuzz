@@ -90,7 +90,15 @@ def many_timed_runs(targetTime, tempDir, args, collector, quiet=True):
         print "%%% " + now + " starting q" + str(iteration) + ": " + url
         result = domInteresting.BrowserResult(bc, url, logPrefix, extraPrefs=extraPrefs, quiet=quiet)
 
-        if result.level > domInteresting.DOM_FINE:
+        while result.level > domInteresting.DOM_FINE:
+
+            if collector:
+                _, cacheMetadata = collector.search(result.crashInfo)
+                if cacheMetadata is not None:
+                    if cacheMetadata['frequent']:
+                        print "Frequent crash matched existing signature: %s" % cacheMetadata["shortDescription"]
+                        break
+
             print "loopdomfuzz.py: will try reducing from " + url
             rFN = createReproFile(fuzzerJS, extraPrefs, result.lines, logPrefix)
             if platform.system() == "Windows":
@@ -133,6 +141,8 @@ def many_timed_runs(targetTime, tempDir, args, collector, quiet=True):
             if collector:
                 # ddsize = lithOps.ddsize(rFN)
                 collector.submit(result.crashInfo, rFN, quality)
+
+            break
 
         writeStats(tempDir, iteration, results)
 
