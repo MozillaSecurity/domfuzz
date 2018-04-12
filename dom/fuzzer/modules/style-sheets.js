@@ -351,7 +351,10 @@ var fuzzerRandomClasses = (function() {
     }
 
     for (var p in pd) {
-      var v = pd[p].initial_values.slice(0);
+      var v = [];
+      if ("initial_values" in pd[p]) {
+        v = v.concat(pd[p].initial_values);
+      }
       v = v.concat(pd[p].other_values);
       if ("invalid_values" in pd[p]) {
         v = v.concat(pd[p].invalid_values);
