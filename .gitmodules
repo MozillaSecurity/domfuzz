@@ -1,0 +1,4 @@
+[submodule "dom/fuzzpriv"]
+	path = dom/extension
+	url = git://github.com/MozillaSecurity/fuzzpriv.git
+	branch = legacy
