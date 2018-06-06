@@ -37,10 +37,14 @@ def runBrowser():
                       default=False)
     options, args = parser.parse_args(sys.argv)
 
+
     reftestScriptDir = args[1]
+    print("reftestScriptDir {}".format(reftestScriptDir))
     utilityDir = args[2]
     profileDir = args[3]
     url = args[4]
+
+    default_app = os.path.join(reftestScriptDir.split('/tests/reftest')[0], 'firefox')
 
     sys.path.append(reftestScriptDir)
     sys.path.append(os.path.join(reftestScriptDir, "..", "mozbase", "mozinfo"))
@@ -56,7 +60,7 @@ def runBrowser():
 
     automation = Automation()
 
-    theapp = os.path.join(reftestScriptDir, automation.DEFAULT_APP)
+    theapp = os.path.join(reftestScriptDir, default_app)
     if not os.path.exists(theapp):
         print "RUNBROWSER ERROR | runbrowser.py | Application %s doesn't exist." % theapp
         sys.exit(1)

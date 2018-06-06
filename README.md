@@ -7,7 +7,13 @@ Most of the code other than testcase generation is written in Python: restarting
 
 ## Setup
 
-Install the required pip packages using `pip install -r requirements.txt`.
+```
+git clone https://github.com/MozillaSecurity/domfuzz.git
+cd domfuzz
+git submodule init
+git submodule update
+pip install -r requirements.txt
+```
 
 Some parts of the fuzzer will only activate if the Python scripts can find your mozilla-central tree:
 ```
