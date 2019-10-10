@@ -1,4 +1,5 @@
-**For the maintained version of jsfunfuzz, head to the [funfuzz](https://github.com/MozillaSecurity/funfuzz) repository.**
+**This project isn't maintained anymore. It is kept for archiving purposes.
+For the maintained version of jsfunfuzz, head to the [funfuzz](https://github.com/MozillaSecurity/funfuzz) repository.**
 
 This repository contains [DOMFuzz](dom) tests layout and other parts of browser engines through DOM API calls.
 
